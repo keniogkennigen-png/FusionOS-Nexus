@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FusionOS - The Future of Mobile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Lock Screen -->
+    <div id="lockScreen" class="screen active">
+        <div class="lock-content">
+            <div class="time-display">
+                <span id="lockTime">12:00</span>
+                <span id="lockDate">Monday, January 1</span>
+            </div>
+            <div class="lock-actions">
+                <div class="camera-shortcut">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 15.2c1.76 0 3.2-1.44 3.2-3.2s-1.44-3.2-3.2-3.2-3.2 1.44-3.2 3.2 1.44 3.2 3.2 3.2z"/>
+                        <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                    </svg>
+                </div>
+                <div class="flashlight-shortcut">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 2h12v2H6zM7.5 4l1 1.5h7l-1-1.5V4h-7v.5zM5 6v12h2V8h10v10h2V6H5zm5 12l3 4 2-2.5 2.5 3.5 2-2.5 2 4H10l1-5z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="swipe-hint">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                </svg>
+                <span>Swipe up to unlock</span>
+            </div>
+        </div>
+        <div class="lock-notifications"></div>
+    </div>
+
+    <!-- Home Screen -->
+    <div id="homeScreen" class="screen">
+        <div class="status-bar">
+            <span class="status-left" id="statusLeft">12:00</span>
+            <div class="status-center">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <path d="M12 3C7.46 3 3.34 4.78.29 7.67c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l11 11c.18.18.43.29.71.29.28 0 .53-.11.71-.29l11-11c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71C20.66 4.78 16.54 3 12 3z"/>
+                </svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <path d="M17 4l-1.41 1.41L18.17 8H11v2h7.17l-2.58 2.59L17 14l5-5-5-5zM4 2h8v2H4v16h8v2H4c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2z"/>
+                </svg>
+            </div>
+            <span class="status-right" id="statusRight">🔋 100%</span>
+        </div>
+
+        <div class="home-content">
+            <div class="app-grid" id="appGrid">
+                <!-- Apps will be dynamically added -->
+            </div>
+        </div>
+
+        <div class="dock" id="dock">
+            <!-- Dock apps -->
+        </div>
+
+        <div class="home-indicator"></div>
+    </div>
+
+    <!-- Control Center -->
+    <div id="controlCenter" class="overlay">
+        <div class="control-content">
+            <div class="control-row">
+                <div class="control-tile connectivity-tile">
+                    <div class="tile-icon wifi-icon active"></div>
+                    <span>WiFi</span>
+                    <span class="tile-subtitle">Home</span>
+                </div>
+                <div class="control-tile connectivity-tile">
+                    <div class="tile-icon bluetooth-icon active"></div>
+                    <span>Bluetooth</span>
+                    <span class="tile-subtitle">On</span>
+                </div>
+                <div class="control-tile connectivity-tile">
+                    <div class="tile-icon airplane-icon"></div>
+                    <span>Airplane</span>
+                </div>
+                <div class="control-tile connectivity-tile">
+                    <div class="tile-icon cellular-icon active"></div>
+                    <span>Cellular</span>
+                    <span class="tile-subtitle">5G</span>
+                </div>
+            </div>
+            <div class="control-row">
+                <div class="control-tile action-tile" id="focusModeTile">
+                    <div class="tile-icon focus-icon"></div>
+                    <span>Focus</span>
+                </div>
+                <div class="control-tile action-tile" id="screenRotateTile">
+                    <div class="tile-icon rotate-icon"></div>
+                    <span>Portrait</span>
+                </div>
+                <div class="control-tile action-tile" id="darkModeTile">
+                    <div class="tile-icon dark-icon"></div>
+                    <span>Dark</span>
+                </div>
+                <div class="control-tile action-tile" id="convergenceTile">
+                    <div class="tile-icon desktop-icon"></div>
+                    <span>Desktop</span>
+                </div>
+            </div>
+            <div class="slider-controls">
+                <div class="slider-control">
+                    <span>Brightness</span>
+                    <input type="range" id="brightnessSlider" min="0" max="100" value="70">
+                </div>
+                <div class="slider-control">
+                    <span>Volume</span>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                </div>
+            </div>
+            <div class="quick-apps">
+                <div class="quick-app" data-app="settings">
+                    <div class="quick-app-icon">⚙️</div>
+                </div>
+                <div class="quick-app" data-app="calculator">
+                    <div class="quick-app-icon">🧮</div>
+                </div>
+                <div class="quick-app" data-app="camera">
+                    <div class="quick-app-icon">📷</div>
+                </div>
+                <div class="quick-app" data-app="flashlight">
+                    <div class="quick-app-icon">🔦</div>
+                </div>
+                <div class="quick-app" data-app="timer">
+                    <div class="quick-app-icon">⏱️</div>
+                </div>
+                <div class="quick-app" data-app="privacy">
+                    <div class="quick-app-icon">🛡️</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Dashboard -->
+    <div id="privacyDashboard" class="app-screen">
+        <div class="app-header">
+            <button class="back-btn" onclick="closeApp('privacyDashboard')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+            <h1>Privacy Dashboard</h1>
+            <button class="settings-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="app-content privacy-content">
+            <div class="privacy-score">
+                <div class="score-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#2d2d2d" stroke-width="8"/>
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#34c759" stroke-width="8"
+                                stroke-dasharray="283" stroke-dashoffset="28" transform="rotate(-90 50 50)"/>
+                    </svg>
+                    <span class="score-value">90</span>
+                </div>
+                <div class="score-label">Privacy Score</div>
+            </div>
+            <div class="privacy-section">
+                <h2>Permission Access</h2>
+                <div class="permission-list" id="permissionList">
+                    <!-- Dynamically generated -->
+                </div>
+            </div>
+            <div class="privacy-section">
+                <h2>Tracker Blocking</h2>
+                <div class="tracker-stats">
+                    <div class="stat-card blocked">
+                        <span class="stat-value">1,247</span>
+                        <span class="stat-label">Trackers Blocked</span>
+                    </div>
+                    <div class="stat-card protected">
+                        <span class="stat-value">48</span>
+                        <span class="stat-label">Data Points Protected</span>
+                    </div>
+                </div>
+            </div>
+            <div class="privacy-section">
+                <h2>Recent Activity</h2>
+                <div class="activity-list" id="activityList">
+                    <!-- Dynamically generated -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security App -->
+    <div id="securityApp" class="app-screen">
+        <div class="app-header">
+            <button class="back-btn" onclick="closeApp('securityApp')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+            <h1>Security Center</h1>
+        </div>
+        <div class="app-content security-content">
+            <div class="security-card">
+                <div class="security-icon locked"></div>
+                <div class="security-info">
+                    <h3>Device Encryption</h3>
+                    <p>Hardware-backed encryption active</p>
+                </div>
+                <div class="security-status active">Secure</div>
+            </div>
+            <div class="security-card">
+                <div class="security-icon verified"></div>
+                <div class="security-info">
+                    <h3>Verified Boot</h3>
+                    <p>System integrity verified</p>
+                </div>
+                <div class="security-status active">Active</div>
+            </div>
+            <div class="security-card">
+                <div class="security-icon sandbox"></div>
+                <div class="security-info">
+                    <h3>App Sandboxing</h3>
+                    <p>Isolated application environments</p>
+                </div>
+                <div class="security-status active">Enabled</div>
+            </div>
+            <div class="security-card">
+                <div class="security-icon network"></div>
+                <div class="security-info">
+                    <h3>Network Hardening</h3>
+                    <p>DNS-over-HTTPS, certificate pinning</p>
+                </div>
+                <div class="security-status active">Protected</div>
+            </div>
+            <div class="security-section">
+                <h2>Security Settings</h2>
+                <div class="setting-item">
+                    <span>Fingerprint Attempts Limit</span>
+                    <span class="setting-value">5</span>
+                </div>
+                <div class="setting-item">
+                    <span>Auto-Lock Timeout</span>
+                    <select class="setting-select">
+                        <option>30 seconds</option>
+                        <option selected>1 minute</option>
+                        <option>5 minutes</option>
+                        <option>Never</option>
+                    </select>
+                </div>
+                <div class="setting-item toggle-item">
+                    <span>Require PIN on Boot</span>
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item toggle-item">
+                    <span>Network Access Control</span>
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant -->
+    <div id="aiAssistant" class="app-screen">
+        <div class="app-header">
+            <button class="back-btn" onclick="closeApp('aiAssistant')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+            <h1>FusionAI</h1>
+            <span class="ai-badge">On-Device</span>
+        </div>
+        <div class="app-content ai-content">
+            <div class="ai-welcome">
+                <div class="ai-avatar"></div>
+                <h2>How can I help you today?</h2>
+                <p>All processing happens locally on your device</p>
+            </div>
+            <div class="ai-suggestions">
+                <button class="ai-suggestion">📅 What's my schedule today?</button>
+                <button class="ai-suggestion">🔋 Optimize battery</button>
+                <button class="ai-suggestion">📊 Privacy status report</button>
+                <button class="ai-suggestion">🎯 Suggest focus time</button>
+            </div>
+            <div class="ai-input-container">
+                <input type="text" id="aiInput" placeholder="Ask me anything...">
+                <button class="ai-send-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="ai-capabilities">
+                <h3>On-Device Capabilities</h3>
+                <div class="capability-list">
+                    <div class="capability">
+                        <span class="capability-icon">🎤</span>
+                        <span>Voice Commands</span>
+                    </div>
+                    <div class="capability">
+                        <span class="capability-icon">📷</span>
+                        <span>Image Understanding</span>
+                    </div>
+                    <div class="capability">
+                        <span class="capability-icon">📝</span>
+                        <span>Smart Text</span>
+                    </div>
+                    <div class="capability">
+                        <span class="capability-icon">🔮</span>
+                        <span>Predictive Actions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Mode -->
+    <div id="desktopMode" class="screen">
+        <div class="desktop-header">
+            <div class="desktop-menu">
+                <span class="menu-item">Activities</span>
+                <span class="menu-item">Applications</span>
+                <span class="menu-item">Files</span>
+            </div>
+            <div class="desktop-system-tray">
+                <span id="desktopTime">12:00 PM</span>
+                <span class="tray-icon">🔋 100%</span>
+                <span class="tray-icon">📶</span>
+            </div>
+        </div>
+        <div class="desktop-workspace">
+            <div class="desktop-sidebar">
+                <div class="sidebar-item active" data-app="files">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                </div>
+                <div class="sidebar-item" data-app="browser">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <div class="sidebar-item" data-app="terminal">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                </div>
+                <div class="sidebar-item" data-app="settings">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                </div>
+            </div>
+            <div class="desktop-main">
+                <div class="desktop-window" id="desktopWindow1">
+                    <div class="window-header">
+                        <div class="window-controls">
+                            <span class="window-btn close"></span>
+                            <span class="window-btn minimize"></span>
+                            <span class="window-btn maximize"></span>
+                        </div>
+                        <span class="window-title">Files</span>
+                    </div>
+                    <div class="window-content">
+                        <div class="file-manager">
+                            <div class="file-sidebar">
+                                <div class="file-location">📁 Home</div>
+                                <div class="file-location">📁 Documents</div>
+                                <div class="file-location">📁 Downloads</div>
+                                <div class="file-location">📁 Pictures</div>
+                            </div>
+                            <div class="file-grid">
+                                <div class="file-item">
+                                    <div class="file-icon folder">📁</div>
+                                    <span>Projects</span>
+                                </div>
+                                <div class="file-item">
+                                    <div class="file-icon folder">📁</div>
+                                    <span>Work</span>
+                                </div>
+                                <div class="file-item">
+                                    <div class="file-icon document">📄</div>
+                                    <span>Report.pdf</span>
+                                </div>
+                                <div class="file-item">
+                                    <div class="file-icon image">🖼️</div>
+                                    <span>Photo.jpg</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings App -->
+    <div id="settingsApp" class="app-screen">
+        <div class="app-header">
+            <button class="back-btn" onclick="closeApp('settingsApp')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+            <h1>Settings</h1>
+        </div>
+        <div class="app-content settings-content">
+            <div class="settings-section">
+                <div class="settings-profile">
+                    <div class="profile-avatar"></div>
+                    <div class="profile-info">
+                        <h3>User</h3>
+                        <p>user@fusionos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h2>Display</h2>
+                <div class="setting-item">
+                    <span>Dark Mode</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>Brightness</span>
+                    <input type="range" min="0" max="100" value="70">
+                </div>
+                <div class="setting-item">
+                    <span>Font Size</span>
+                    <select>
+                        <option>Small</option>
+                        <option selected>Medium</option>
+                        <option>Large</option>
+                        <option>Extra Large</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h2>Security & Privacy</h2>
+                <div class="setting-item clickable" onclick="openApp('securityApp')">
+                    <span>🔒 Security Center</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+                <div class="setting-item clickable" onclick="openApp('privacyDashboard')">
+                    <span>🛡️ Privacy Dashboard</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+                <div class="setting-item">
+                    <span>Location Access</span>
+                    <select>
+                        <option>Never</option>
+                        <option>While Using</option>
+                        <option selected>Always Ask</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h2>AI Features</h2>
+                <div class="setting-item clickable" onclick="openApp('aiAssistant')">
+                    <span>🤖 FusionAI Settings</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+                <div class="setting-item">
+                    <span>On-Device Processing Only</span>
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h2>Convergence</h2>
+                <div class="setting-item">
+                    <span>Desktop Mode</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="convergenceToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>Auto-Connect to Displays</span>
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h2>About</h2>
+                <div class="setting-item">
+                    <span>FusionOS Version</span>
+                    <span class="setting-value">1.0.0 Beta</span>
+                </div>
+                <div class="setting-item">
+                    <span>Based on</span>
+                    <span class="setting-value">AOSP + Linux</span>
+                </div>
+                <div class="setting-item clickable">
+                    <span>Source Code</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Store -->
+    <div id="appStore" class="app-screen">
+        <div class="app-header">
+            <button class="back-btn" onclick="closeApp('appStore')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+            <h1>Fusion Store</h1>
+        </div>
+        <div class="app-content store-content">
+            <div class="store-search">
+                <input type="text" placeholder="Search apps...">
+            </div>
+            <div class="store-section">
+                <h2>Featured</h2>
+                <div class="featured-app">
+                    <div class="featured-icon">🛡️</div>
+                    <div class="featured-info">
+                        <h3>Privacy Shield</h3>
+                        <p>Advanced tracker blocking and monitoring</p>
+                        <button class="install-btn">Install</button>
+                    </div>
+                </div>
+            </div>
+            <div class="store-section">
+                <h2>Categories</h2>
+                <div class="category-grid">
+                    <div class="category-item">
+                        <span class="category-icon">📱</span>
+                        <span>Productivity</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">🎨</span>
+                        <span>Design</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">🔒</span>
+                        <span>Security</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">💬</span>
+                        <span>Communication</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">🎮</span>
+                        <span>Games</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">📚</span>
+                        <span>Education</span>
+                    </div>
+                </div>
+            </div>
+            <div class="store-section">
+                <h2>Open Source Picks</h2>
+                <div class="app-list">
+                    <div class="app-item">
+                        <div class="app-icon">📖</div>
+                        <div class="app-info">
+                            <h4>F-Droid</h4>
+                            <p>Open source app repository</p>
+                        </div>
+                        <button class="install-btn">Install</button>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">🌐</div>
+                        <div class="app-info">
+                            <h4>Brave Browser</h4>
+                            <p>Privacy-first web browser</p>
+                        </div>
+                        <button class="install-btn">Install</button>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">✉️</div>
+                        <div class="app-info">
+                            <h4>ProtonMail</h4>
+                            <p>Secure email client</p>
+                        </div>
+                        <button class="install-btn">Install</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal App -->
+    <div id="terminalApp" class="app-screen">
+        <div class="app-header">
+            <button class="back-btn" onclick="closeApp('terminalApp')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+            <h1>Terminal</h1>
+        </div>
+        <div class="app-content terminal-content">
+            <div class="terminal-window">
+                <div class="terminal-output" id="terminalOutput">
+                    <div class="terminal-line">FusionOS 1.0.0 Beta</div>
+                    <div class="terminal-line">Type 'help' for available commands</div>
+                    <div class="terminal-line"></div>
+                </div>
+                <div class="terminal-input-line">
+                    <span class="prompt">user@fusionos:~$</span>
+                    <input type="text" id="terminalInput" autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator App -->
+    <div id="calculatorApp" class="app-screen">
+        <div class="app-header">
+            <button class="back-btn" onclick="closeApp('calculatorApp')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+            <h1>Calculator</h1>
+        </div>
+        <div class="app-content calculator-content">
+            <div class="calculator-display">
+                <input type="text" id="calcDisplay" readonly value="0">
+            </div>
+            <div class="calculator-buttons">
+                <button class="calc-btn function" onclick="calcClear()">C</button>
+                <button class="calc-btn function" onclick="calcToggleSign()">±</button>
+                <button class="calc-btn function" onclick="calcPercent()">%</button>
+                <button class="calc-btn operator" onclick="calcOperator('/')">÷</button>
+                <button class="calc-btn number" onclick="calcNumber('7')">7</button>
+                <button class="calc-btn number" onclick="calcNumber('8')">8</button>
+                <button class="calc-btn number" onclick="calcNumber('9')">9</button>
+                <button class="calc-btn operator" onclick="calcOperator('*')">×</button>
+                <button class="calc-btn number" onclick="calcNumber('4')">4</button>
+                <button class="calc-btn number" onclick="calcNumber('5')">5</button>
+                <button class="calc-btn number" onclick="calcNumber('6')">6</button>
+                <button class="calc-btn operator" onclick="calcOperator('-')">−</button>
+                <button class="calc-btn number" onclick="calcNumber('1')">1</button>
+                <button class="calc-btn number" onclick="calcNumber('2')">2</button>
+                <button class="calc-btn number" onclick="calcNumber('3')">3</button>
+                <button class="calc-btn operator" onclick="calcOperator('+')">+</button>
+                <button class="calc-btn number zero" onclick="calcNumber('0')">0</button>
+                <button class="calc-btn number" onclick="calcDecimal()">.</button>
+                <button class="calc-btn equals" onclick="calcEquals()">=</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera App -->
+    <div id="cameraApp" class="app-screen">
+        <div class="app-header transparent">
+            <button class="back-btn light" onclick="closeApp('cameraApp')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="camera-interface">
+            <div class="camera-viewfinder">
+                <div class="camera-grid"></div>
+            </div>
+            <div class="camera-controls">
+                <div class="camera-shutter"></div>
+            </div>
+            <div class="camera-modes">
+                <span class="camera-mode active">Photo</span>
+                <span class="camera-mode">Video</span>
+                <span class="camera-mode">AI</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div id="notificationPanel" class="overlay">
+        <div class="notification-content">
+            <div class="notification-header">
+                <span>Notifications</span>
+                <button class="clear-notifications">Clear All</button>
+            </div>
+            <div class="notification-list" id="notificationList">
+                <!-- Dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>About FusionOS</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="about-logo"></div>
+                <h1>FusionOS</h1>
+                <p class="version">Version 1.0.0 Beta</p>
+                <p class="tagline">Where Privacy Meets Innovation</p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <span class="feature-icon">🔒</span>
+                        <span>Security First</span>
+                    </div>
+                    <div class="about-feature">
+                        <span class="feature-icon">🛡️</span>
+                        <span>Privacy Protected</span>
+                    </div>
+                    <div class="about-feature">
+                        <span class="feature-icon">🖥️</span>
+                        <span>Convergence Ready</span>
+                    </div>
+                    <div class="about-feature">
+                        <span class="feature-icon">🤖</span>
+                        <span>On-Device AI</span>
+                    </div>
+                </div>
+                <p class="about-description">
+                    FusionOS is a conceptual mobile operating system that combines the best features
+                    from Android, iOS, GrapheneOS, Ubuntu Touch, and other open source projects.
+                    This web simulation demonstrates the vision for a truly user-empowering mobile experience.
+                </p>
+                <div class="about-source">
+                    <h3>Open Source Foundation</h3>
+                    <p>Built upon the shoulders of giants:</p>
+                    <div class="source-logos">
+                        <span>AOSP</span>
+                        <span>GrapheneOS</span>
+                        <span>Ubuntu Touch</span>
+                        <span>LineageOS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

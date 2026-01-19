@@ -903,9 +903,53 @@ This project is based on concepts from established mobile OS courses and materia
 
 **Linux Kernel Documentation**: Understanding Linux's approach to mobile features (wakelocks, low-memory killer) informed the design decisions in this kernel.
 
+## Areas for Contribution
+
+Several areas welcome contribution from the community. Application development opportunities include new native applications, improvements to existing applications, and integration of additional libraries. Driver development covers adding support for new hardware devices, improving existing driver functionality, and implementing additional device classes. Documentation improvements include fixing errors, expanding explanations, and creating tutorials for new developers. Testing contributions involve writing test cases, testing on real hardware, and reporting bugs with detailed reproduction steps.
+
 ## License
 
-MIT License - See LICENSE file for details.
+FusionOS Nexus is open source software licensed under the MIT License. See the LICENSE file for full license terms.
+
+The MIT License permits use, modification, and distribution of the software and associated documentation for any purpose, including commercial use. The license requires preservation of the copyright notice and disclaimer. The license explicitly disclaims warranties and limits liability for damages arising from use of the software.
+
+## Legal Disclaimer
+
+### IMPORTANT: PLEASE READ THIS LEGAL DISCLAIMER CAREFULLY BEFORE USING FUSIONOS NEXUS.
+
+### Disclaimer of Warranty
+
+FUSIONOS NEXUS IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. THE DEVELOPERS AND CONTRIBUTORS MAKE NO REPRESENTATIONS OR WARRANTIES REGARDING THE SUITABILITY, RELIABILITY, OR ACCURACY OF FUSIONOS NEXUS FOR ANY PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF FUSIONOS NEXUS IS WITH THE USER.
+
+Some jurisdictions do not allow the exclusion of implied warranties, so the above exclusion may not apply to you. In such jurisdictions, any implied warranties are limited in duration to ninety (90) days from the date of first use. This warranty gives you specific legal rights, and you may have other rights that vary from jurisdiction to jurisdiction.
+
+### Limitation of Liability
+
+IN NO EVENT SHALL THE DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF FUSIONOS NEXUS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+Some jurisdictions do not allow the limitation or exclusion of liability for incidental or consequential damages, so the above limitation may not apply to you. In such jurisdictions, the total liability of the developers and contributors shall be limited to the greatest extent permitted by applicable law.
+
+### Educational Purpose Disclaimer
+
+FusionOS Nexus is primarily an educational project intended to demonstrate operating system concepts and provide a learning resource for students, developers, and enthusiasts. The software is not designed, tested, or certified for use in critical systems, safety-critical applications, medical devices, or environments where failure could cause harm, injury, or death. Users should not deploy FusionOS Nexus in production environments, high-availability systems, or any application where reliability is essential.
+
+### Third-Party Components
+
+FusionOS Nexus may incorporate or link to third-party software components, each subject to their respective licenses. Users are responsible for reviewing and complying with all applicable third-party licenses. The FusionOS Nexus license applies only to components developed as part of this project and does not extend to third-party dependencies.
+
+### Security Considerations
+
+As an educational project, FusionOS Nexus may not implement all security measures found in production operating systems. Users should not rely on FusionOS Nexus for secure computing in threat environments. While FusionOS Nexus includes security features such as process isolation and permission checking, the overall security posture has not been formally audited. Users with specific security requirements should use established operating systems with proven security implementations.
+
+### Trademarks
+
+FusionOS Nexus and the FusionOS Nexus logo are trademarks of the project maintainers. Use of these marks without permission in connection with derivative works, commercial products, or services is prohibited. References to third-party products and services are for informational purposes only and do not constitute endorsement or affiliation.
+
+### General Provisions
+
+This legal disclaimer constitutes the entire agreement between you and the FusionOS Nexus project regarding your use of FusionOS Nexus. If any provision of this disclaimer is found to be unenforceable, the remaining provisions shall remain in full force and effect. This disclaimer shall be governed by and construed in accordance with applicable law, without regard to conflict of law principles.
+
+BY USING FUSIONOS NEXUS, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS LEGAL DISCLAIMER, UNDERSTAND ITS TERMS, AND AGREE TO BE BOUND BY ITS CONDITIONS.
 
 ## Acknowledgments
 
@@ -919,3 +963,9 @@ MIT License - See LICENSE file for details.
 ---
 
 **Note**: This kernel is REAL CODE. It compiles to an actual binary that runs on ARM64 hardware. It is not a web simulation or educational toy—it's a functional operating system kernel demonstrating real mobile OS concepts derived from established academic and industry sources.
+
+---
+
+**GitHub Repository**: https://github.com/keniogkennigen-png/FusionOS-Nexus
+
+**FusionOS Nexus** - Illuminating Operating System Development

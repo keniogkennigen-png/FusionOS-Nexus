@@ -94,6 +94,187 @@ Mobile devices store sensitive personal data and run untrusted third-party appli
 
 **Verified Boot**: Modern mobile devices implement verified boot chains to ensure system software hasn't been tampered with. FusionOS Nexus includes a verified boot framework for hardware-based integrity verification.
 
+## Project Structure
+
+```
+fusionos-nexus/
+├── kernel/
+│   ├── kernel.h          # Main kernel header
+│   ├── kernel.c          # Core kernel implementation
+│   └── boot.S            # ARM64 boot stub
+├── Makefile              # Build system
+├── linker.ld             # Linker script
+└── README.md             # This file
+```
+
+## Building
+
+### Prerequisites
+
+You need an ARM64 cross-compiler. Install on Ubuntu/Debian:
+
+```bash
+sudo apt-get install gcc-aarch64-linux-gnu gdb-multiarch qemu-system-arm
+```
+
+### Build Commands
+
+```bash
+# Build the kernel
+make
+
+# Build with debug symbols
+make debug
+
+# Clean build artifacts
+make clean
+
+# Generate disassembly
+make disasm
+
+# View symbol table
+make symbols
+
+# Verify ELF headers
+make verify
+
+# Print build information
+make info
+```
+
+### Build Output
+
+The build produces:
+- `build/bin/kernel.elf` - ELF executable with debug symbols
+- `build/bin/kernel.img` - Raw binary kernel image
+- `build/bin/kernel.map` - Linker map file
+
+### Build Configuration
+
+The kernel can be configured with different options:
+
+**Debug Build**: Includes debug symbols, disabled optimizations, and verbose logging.
+
+**Release Build**: Optimized for size and performance, minimal logging.
+
+**Secure Build**: Includes integrity verification and secure boot support.
+
+## Running in QEMU
+
+### Text Mode (Serial Console)
+
+```bash
+make qemu
+```
+
+This launches QEMU with serial console output, suitable for debugging kernel startup and system calls.
+
+### Graphical Mode
+
+```bash
+make qemu-gui
+```
+
+For kernels with framebuffer support, this provides graphical output.
+
+### With GDB Debugging
+
+```bash
+# Terminal 1: Start QEMU with GDB
+make qemu-debug
+
+# Terminal 2: Connect GDB
+aarch64-linux-gnu-gdb build/bin/kernel.elf
+(gdb) target remote localhost:1234
+(gdb) break kernel_main
+(gdb) continue
+```
+
+### Create SD Card Image
+
+```bash
+make sd-image
+```
+
+This creates `build/bin/sdcard.img`, a bootable SD card image for ARM development boards.
+
+## Architecture Details
+
+### Memory Layout
+
+```
+0x00000000 - 0x00100000  Text (Code)      [1 MB]
+0x00100000 - 0x00200000  Data              [1 MB]
+0x00200000 - 0x00300000  BSS               [1 MB]
+0x00300000 - 0x00700000  Heap              [4 MB]
+0x00700000 - 0x00800000  Free
+0x00800000 - 0x00C00000  Page Tables       [4 MB]
+0x00C00000 - 0x01000000  Stack             [4 MB]
+```
+
+### Boot Sequence
+
+The boot sequence follows established ARM64 boot protocols:
+
+1. **Bootloader**: Loads kernel to address `0x40000000`, passes DTB (Device Tree Blob) in x1.
+
+2. **Boot Stub** (`boot.S`): Executes first, runs in EL2 (Hypervisor) or EL1 (Kernel) mode.
+
+3. **Exception Level Configuration**: Detects current EL and transitions if necessary (EL3 → EL2 → EL1).
+
+4. **BSS Zeroing**: Clears BSS section to ensure all uninitialized globals are zero.
+
+5. **MMU Initialization**: Sets up identity mapping for low memory, configures page tables.
+
+6. **C Runtime**: Initializes global constructors and calls `kernel_main()`.
+
+7. **Kernel Initialization**: Runs core subsystems (memory, scheduler, IPC, drivers).
+
+8. **Init Process**: Spawns the first user-space process.
+
+### Page Table Structure
+
+FusionOS Nexus implements a 3-level page table hierarchy for 4KB pages:
+
+**Level 1 (PGD)**: 512 entries, each covering 1GB of virtual address space.
+
+**Level 2 (PUD)**: 512 entries, each covering 2MB of virtual address space.
+
+**Level 3 (PMD)**: 512 entries, each covering 4KB (single page).
+
+**Translation Process**:
+1. Bits 47:39 → PGD index (9 bits)
+2. Bits 38:30 → PUD index (9 bits)
+3. Bits 29:21 → PMD index (9 bits)
+4. Bits 20:12 → Page offset (9 bits)
+5. Bits 11:0 → Byte offset within page (12 bits)
+
+### Exception Handling
+
+ARM64 defines multiple exception levels and types:
+
+**Exception Levels**:
+- EL0: User mode, least privilege
+- EL1: Kernel mode, standard OS operations
+- EL2: Hypervisor mode, virtualization support
+- EL3: Secure Monitor, highest privilege
+
+**Exception Types**:
+- Synchronous: System calls, exceptions (page fault, divide error)
+- IRQ: Regular hardware interrupts
+- FIQ: Fast interrupts, reserved for time-critical devices
+- SError: System error, typically async memory errors
+
+### Interrupt Controller
+
+FusionOS Nexus supports ARM's Generic Interrupt Controller (GIC):
+
+**Distributor**: Routes interrupts to CPU interfaces, handles priority and routing.
+
+**CPU Interface**: Delivers interrupts to CPU, handles interrupt acknowledgment.
+
+**Software Generated Interrupts**: Used for IPIs (Inter-Processor Interrupts) and software timers.
+
 ## Power Management Subsystem
 
 Power management is the primary function of any mobile operating system. Unlike desktop OSes where power efficiency is secondary, mobile OSes must carefully manage every milliwatt of battery power. FusionOS Nexus implements a comprehensive power management framework based on established mobile OS principles.
@@ -598,187 +779,6 @@ The IPC module provides inter-process communication:
 **Service Registry**: Tracks available system services for service discovery.
 
 **Permission Checking**: Validates caller permissions for each transaction.
-
-## Project Structure
-
-```
-fusionos-nexus/
-├── kernel/
-│   ├── kernel.h          # Main kernel header
-│   ├── kernel.c          # Core kernel implementation
-│   └── boot.S            # ARM64 boot stub
-├── Makefile              # Build system
-├── linker.ld             # Linker script
-└── README.md             # This file
-```
-
-## Building
-
-### Prerequisites
-
-You need an ARM64 cross-compiler. Install on Ubuntu/Debian:
-
-```bash
-sudo apt-get install gcc-aarch64-linux-gnu gdb-multiarch qemu-system-arm
-```
-
-### Build Commands
-
-```bash
-# Build the kernel
-make
-
-# Build with debug symbols
-make debug
-
-# Clean build artifacts
-make clean
-
-# Generate disassembly
-make disasm
-
-# View symbol table
-make symbols
-
-# Verify ELF headers
-make verify
-
-# Print build information
-make info
-```
-
-### Build Output
-
-The build produces:
-- `build/bin/kernel.elf` - ELF executable with debug symbols
-- `build/bin/kernel.img` - Raw binary kernel image
-- `build/bin/kernel.map` - Linker map file
-
-### Build Configuration
-
-The kernel can be configured with different options:
-
-**Debug Build**: Includes debug symbols, disabled optimizations, and verbose logging.
-
-**Release Build**: Optimized for size and performance, minimal logging.
-
-**Secure Build**: Includes integrity verification and secure boot support.
-
-## Running in QEMU
-
-### Text Mode (Serial Console)
-
-```bash
-make qemu
-```
-
-This launches QEMU with serial console output, suitable for debugging kernel startup and system calls.
-
-### Graphical Mode
-
-```bash
-make qemu-gui
-```
-
-For kernels with framebuffer support, this provides graphical output.
-
-### With GDB Debugging
-
-```bash
-# Terminal 1: Start QEMU with GDB
-make qemu-debug
-
-# Terminal 2: Connect GDB
-aarch64-linux-gnu-gdb build/bin/kernel.elf
-(gdb) target remote localhost:1234
-(gdb) break kernel_main
-(gdb) continue
-```
-
-### Create SD Card Image
-
-```bash
-make sd-image
-```
-
-This creates `build/bin/sdcard.img`, a bootable SD card image for ARM development boards.
-
-## Architecture Details
-
-### Memory Layout
-
-```
-0x00000000 - 0x00100000  Text (Code)      [1 MB]
-0x00100000 - 0x00200000  Data              [1 MB]
-0x00200000 - 0x00300000  BSS               [1 MB]
-0x00300000 - 0x00700000  Heap              [4 MB]
-0x00700000 - 0x00800000  Free
-0x00800000 - 0x00C00000  Page Tables       [4 MB]
-0x00C00000 - 0x01000000  Stack             [4 MB]
-```
-
-### Boot Sequence
-
-The boot sequence follows established ARM64 boot protocols:
-
-1. **Bootloader**: Loads kernel to address `0x40000000`, passes DTB (Device Tree Blob) in x1.
-
-2. **Boot Stub** (`boot.S`): Executes first, runs in EL2 (Hypervisor) or EL1 (Kernel) mode.
-
-3. **Exception Level Configuration**: Detects current EL and transitions if necessary (EL3 → EL2 → EL1).
-
-4. **BSS Zeroing**: Clears BSS section to ensure all uninitialized globals are zero.
-
-5. **MMU Initialization**: Sets up identity mapping for low memory, configures page tables.
-
-6. **C Runtime**: Initializes global constructors and calls `kernel_main()`.
-
-7. **Kernel Initialization**: Runs core subsystems (memory, scheduler, IPC, drivers).
-
-8. **Init Process**: Spawns the first user-space process.
-
-### Page Table Structure
-
-FusionOS Nexus implements a 3-level page table hierarchy for 4KB pages:
-
-**Level 1 (PGD)**: 512 entries, each covering 1GB of virtual address space.
-
-**Level 2 (PUD)**: 512 entries, each covering 2MB of virtual address space.
-
-**Level 3 (PMD)**: 512 entries, each covering 4KB (single page).
-
-**Translation Process**:
-1. Bits 47:39 → PGD index (9 bits)
-2. Bits 38:30 → PUD index (9 bits)
-3. Bits 29:21 → PMD index (9 bits)
-4. Bits 20:12 → Page offset (9 bits)
-5. Bits 11:0 → Byte offset within page (12 bits)
-
-### Exception Handling
-
-ARM64 defines multiple exception levels and types:
-
-**Exception Levels**:
-- EL0: User mode, least privilege
-- EL1: Kernel mode, standard OS operations
-- EL2: Hypervisor mode, virtualization support
-- EL3: Secure Monitor, highest privilege
-
-**Exception Types**:
-- Synchronous: System calls, exceptions (page fault, divide error)
-- IRQ: Regular hardware interrupts
-- FIQ: Fast interrupts, reserved for time-critical devices
-- SError: System error, typically async memory errors
-
-### Interrupt Controller
-
-FusionOS Nexus supports ARM's Generic Interrupt Controller (GIC):
-
-**Distributor**: Routes interrupts to CPU interfaces, handles priority and routing.
-
-**CPU Interface**: Delivers interrupts to CPU, handles interrupt acknowledgment.
-
-**Software Generated Interrupts**: Used for IPIs (Inter-Processor Interrupts) and software timers.
 
 ## Learning Outcomes
 

@@ -1,0 +1,44 @@
+{
+  "name": "fusionos",
+  "version": "1.0.0",
+  "description": "FusionOS - A conceptual mobile operating system combining the best features from Android, iOS, and open source projects",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext js,jsx",
+    "test": "vitest"
+  },
+  "keywords": [
+    "mobile-os",
+    "operating-system",
+    "android",
+    "ios",
+    "privacy",
+    "security",
+    "convergence",
+    "open-source",
+    "webos",
+    "mobile",
+    "smartphone"
+  ],
+  "author": "MiniMax Agent",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minimax-agent/fusionos"
+  },
+  "bugs": {
+    "url": "https://github.com/minimax-agent/fusionos/issues"
+  },
+  "homepage": "https://github.com/minimax-agent/fusionos",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0",
+    "eslint": "^8.50.0"
+  }
+}
